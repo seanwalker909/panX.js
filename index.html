@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<input class="pan-control" type="range" min="0" max=".99999" step=".0015" value="0" oninput="updateSlider(this.value)">
+<span class="gain-value">0</span>
+<script src="osc-js/lib/osc.browser.js"></script>
+
+<audio controls>
+  <source src="p=np v3.wav" type="audio/wav">
+</audio>
+
+<script>
+  //OSC
+  const osc = new OSC();
+  osc.open({ host: '172.26.20.200', port: 57120 });
+
+  // document.getElementById('send').addEventListener('click', function () {
+  //   var message = new OSC.Message('/test/random', Math.random());
+  //   osc.send(message);
+  // });
+
+
+  // var myAudio = document.querySelector('audio');
+  
+  var panControl = document.querySelector('.pan-control');
+  var panValue = document.querySelector('.gain-value');
+  panValue = panControl.value;
+
+  const context = new AudioContext();
+  // var source = context.createMediaElementSource(myAudio);
+
+  // Sets the destination properties for multichannel access.
+  var channelCount = context.destination.maxChannelCount;
+  context.destination.channelCount = channelCount;
+  context.destination.channelCountMode = 'explicit';
+  context.destination.channelInterpretation = 'discrete';
+  console.log("channelCount: " + channelCount);
+
+
+  // Loads module script via AudioWorklet.
+  context.audioWorklet.addModule('panX.js').then(() => {
+    let oscillator = new OscillatorNode(context);
+    oscillator.type = "sawtooth";
+
+    // After the resolution of module loading, an AudioWorkletNode can be
+    // constructed.
+    let panX = new AudioWorkletNode(context, 'panX', {
+      channelCount: channelCount,
+      channelCountMode: 'explicit',
+      channelInterpretation: 'discrete',
+    });
+    // AudioWorkletNode can be interoperable with other native AudioNodes.
+    let gainNode = new GainNode(context);
+    gainNode.gain.value = .1;
+    oscillator.connect(panX).connect(gainNode).connect(context.destination);
+    oscillator.start();
+
+    let pan = panX.parameters.get('gain');
+
+    updateSlider = function (value) {
+      pan.setTargetAtTime(value, context.currentTime, .015);
+    }
+  });
+
+</script>
+
+</html>
