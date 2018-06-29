@@ -5,29 +5,13 @@
 <span class="gain-value">0</span>
 <script src="osc-js/lib/osc.browser.js"></script>
 
-<audio controls>
-  <source src="p=np v3.wav" type="audio/wav">
-</audio>
 
 <script>
-  //OSC
-  const osc = new OSC();
-  osc.open({ host: '172.26.20.200', port: 57120 });
-
-  // document.getElementById('send').addEventListener('click', function () {
-  //   var message = new OSC.Message('/test/random', Math.random());
-  //   osc.send(message);
-  // });
-
-
-  // var myAudio = document.querySelector('audio');
-  
   var panControl = document.querySelector('.pan-control');
   var panValue = document.querySelector('.gain-value');
   panValue = panControl.value;
 
   const context = new AudioContext();
-  // var source = context.createMediaElementSource(myAudio);
 
   // Sets the destination properties for multichannel access.
   var channelCount = context.destination.maxChannelCount;
