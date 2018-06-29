@@ -7,4 +7,4 @@ If you have python installed,
 ```
 run python -m SimpleHTTPServer 
 ```
-in the directory and then connect to localhost:8000
+in the directory of index.html and then connect to localhost:8000
