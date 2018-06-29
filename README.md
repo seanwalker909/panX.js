@@ -2,7 +2,7 @@
 Algorithm in javascript using AudioWorklet for panning sound across an arbitrary number of speakers.
 
 
-Run on a server, using incognito.
+Run on a server in chrome.
 If you have python installed,
 ```
 run python -m SimpleHTTPServer 
