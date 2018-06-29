@@ -10,8 +10,6 @@ class panX extends AudioWorkletProcessor {
     this._channelCount = dictionary.outputChannelCount;
   }
 
-  //TODO
-  //up mix mono signal to stereo
   process(inputs, outputs, parameters) {
     let input = inputs[0];
     let inputChannel = input[0];
