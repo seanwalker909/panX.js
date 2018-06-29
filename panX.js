@@ -1,6 +1,6 @@
 class panX extends AudioWorkletProcessor {
 
-  // Custom AudioParams can be defined with this static getter.
+  // Define custom gain AudioParam
   static get parameterDescriptors() {
     return [{ name: 'gain', defaultValue: 0 }];
   }
@@ -15,7 +15,7 @@ class panX extends AudioWorkletProcessor {
   process(inputs, outputs, parameters) {
     let input = inputs[0];
     let inputChannel = input[0];
-    let output = outputs[0];
+    let output = outputs[0]; //each element of this array can send a mono (or a left of right channels of stereo) to a speaker
 
     let gain = parameters.gain;
 
@@ -23,7 +23,7 @@ class panX extends AudioWorkletProcessor {
       let rangePerSpeaker = 1.0 / input.length;
       let speaker = Math.floor(gain[0] / rangePerSpeaker);
       let nextSpeaker = speaker + 1;
-      if (nextSpeaker == input.length) {
+      if (nextSpeaker == input.length) { //last speaker, sound does not 'wrap.'
         nextSpeaker = -1;
       }
 
