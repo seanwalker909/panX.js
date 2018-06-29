@@ -3,8 +3,6 @@
 
 <input class="pan-control" type="range" min="0" max=".99999" step=".0015" value="0" oninput="updateSlider(this.value)">
 <span class="gain-value">0</span>
-<script src="osc-js/lib/osc.browser.js"></script>
-
 
 <script>
   var panControl = document.querySelector('.pan-control');
@@ -12,22 +10,17 @@
   panValue = panControl.value;
 
   const context = new AudioContext();
-
-  // Sets the destination properties for multichannel access.
+  
   var channelCount = context.destination.maxChannelCount;
   context.destination.channelCount = channelCount;
   context.destination.channelCountMode = 'explicit';
   context.destination.channelInterpretation = 'discrete';
   console.log("channelCount: " + channelCount);
 
-
-  // Loads module script via AudioWorklet.
   context.audioWorklet.addModule('panX.js').then(() => {
     let oscillator = new OscillatorNode(context);
     oscillator.type = "sawtooth";
 
-    // After the resolution of module loading, an AudioWorkletNode can be
-    // constructed.
     let panX = new AudioWorkletNode(context, 'panX', {
       channelCount: channelCount,
       channelCountMode: 'explicit',
